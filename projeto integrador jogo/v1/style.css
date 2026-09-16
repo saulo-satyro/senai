@@ -1,0 +1,214 @@
+/* RESET E ESTILOS GERAIS */
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  font-family: 'Courier New', Courier, monospace;
+}
+
+body {
+  background-color: #121212;
+  color: #ffffff;
+  text-align: center;
+  margin: 0;
+  padding: 0;
+  width: 100vw;
+  height: 100vh;
+  overflow: hidden;
+}
+
+/* PAINEL SUPERIOR (HUD) */
+#hud {
+  position: absolute;
+  top: 15px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 90%;
+  max-width: 900px;
+  z-index: 10;
+  background: rgba(30, 30, 36, 0.9);
+  border: 3px solid #00ffcc;
+  border-radius: 8px;
+  padding: 12px 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-weight: bold;
+  font-size: 14px;
+}
+
+.hud-box {
+  display: flex;
+  gap: 6px;
+  align-items: center;
+}
+
+.hud-item {
+  color: #00ffcc;
+  font-size: 16px;
+}
+
+/* CONTAINER DA PISTA (ASFALTO) */
+#game-container {
+  width: 100vw;
+  height: 100vh;
+  background-color: #2b2b2b;
+  position: relative;
+  overflow: hidden;
+  border: none;
+  box-shadow: none;
+}
+
+/* LINHAS AMARELAS ANIMADAS DA RUA */
+.lane-line {
+  position: absolute;
+  width: 200%;
+  height: 6px;
+  left: 0;
+  background: repeating-linear-gradient(
+    90deg,
+    #f1c40f 0px,
+    #f1c40f 35px,
+    transparent 35px,
+    transparent 70px
+  );
+  animation: moveRoad 0.4s linear infinite;
+}
+
+@keyframes moveRoad {
+  0% { transform: translateX(0); }
+  100% { transform: translateX(-70px); }
+}
+
+/* PERSONAGEM (JOGADOR) */
+#player {
+  width: 136px;                              /* 68px * 2 */
+  height: 126px;                             /* 63px * 2 */
+  position: absolute;
+  left: 80px;
+  background-image: url('player_sheet.png');
+  background-size: 544px 126px;              /* 272px * 2 de largura e 63px * 2 de altura */
+  background-repeat: no-repeat;
+  background-color: transparent;
+  image-rendering: pixelated;                /* Garante que o pixel fique nítido sem borrar */
+  z-index: 5;
+  transition: top 0.1s ease-out;
+
+  animation: animaBoneco 0.6s steps(4) infinite;
+}
+
+@keyframes animaBoneco {
+  from { background-position: 0px 0px; }
+  to { background-position: -544px 0px; }     /* -272px * 2 */
+}
+
+/* ITENS E OBSTÁCULOS */
+/* ITENS E OBSTÁCULOS (AUMENTADOS E SEM FUNDO) */
+.item {
+  width: 80px;                    /* Aumente aqui a largura */
+  height: 80px;                   /* Aumente aqui a altura */
+  position: absolute;
+  right: -90px;
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center;
+  background-color: transparent;
+  box-shadow: none;
+  border-radius: 0;
+  z-index: 4;
+}
+
+/* Garante que não haja cores residuais */
+/* BORDA / CONTORNO PARA ACESSIBILIDADE E INCLUSÃO */
+
+/* Lixos: Contorno / Brilho Vermelho */
+.trash {
+  background-color: transparent;
+  box-shadow: none;
+  /* Cria uma borda de destaque vermelha ao redor do sprite transparente */
+  filter: drop-shadow(2px 0 0 #ff4757) 
+          drop-shadow(-2px 0 0 #ff4757) 
+          drop-shadow(0 2px 0 #ff4757) 
+          drop-shadow(0 -2px 0 #ff4757);
+}
+
+/* Árvores / Plantações: Contorno / Brilho Verde */
+.nature {
+  background-color: transparent;
+  box-shadow: none;
+  /* Cria uma borda de destaque verde ao redor do sprite transparente */
+  filter: drop-shadow(2px 0 0 #2ed573) 
+          drop-shadow(-2px 0 0 #2ed573) 
+          drop-shadow(0 2px 0 #2ed573) 
+          drop-shadow(0 -2px 0 #2ed573);
+}
+/* TELA DE GAME OVER */
+#game-over-screen {
+  display: none;
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.88);
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  z-index: 10;
+}
+
+#game-over-screen h1 {
+  color: #ff4757;
+  font-size: 38px;
+  margin-bottom: 12px;
+  text-shadow: 0 0 10px rgba(255, 71, 87, 0.5);
+}
+
+#final-stats {
+  font-size: 16px;
+  margin-bottom: 20px;
+  color: #dddddd;
+}
+
+#restart-btn {
+  padding: 12px 24px;
+  font-size: 16px;
+  font-weight: bold;
+  background: #00ffcc;
+  color: #121212;
+  border: none;
+  cursor: pointer;
+  border-radius: 6px;
+  transition: transform 0.2s, background 0.2s;
+}
+
+#restart-btn:hover {
+  background: #00cca3;
+  transform: scale(1.05);
+}
+
+/* TEMAS DOS BIOMAS */
+#game-container.biome-america-do-sul {
+  background-color: #1b4332; /* Verde Mata Atlântica */
+  transition: background-color 1s ease;
+}
+
+#game-container.biome-asia {
+  background-color: #3a0ca3; /* Roxo/Neon Asiático */
+  transition: background-color 1s ease;
+}
+
+#game-container.biome-africa {
+  background-color: #7f4f24; /* Terra/Savana */
+  transition: background-color 1s ease;
+}
+
+#game-container.biome-europa {
+  background-color: #2b2d42; /* Cinza Urbano */
+  transition: background-color 1s ease;
+}
+
+#game-container.biome-antartida {
+  background-color: #a2d2ff; /* Azul Gelo */
+  transition: background-color 1s ease;
+}

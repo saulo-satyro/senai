@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Corra pelo Mundo - Alpha</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <!-- Painel do Topo (HUD) -->
+  <div id="hud">
+    <div class="hud-box">VIDAS: <span id="lives-display" class="hud-item">♥♥♥</span></div>
+    <div class="hud-box">PONTOS: <span id="score-display" class="hud-item">0</span></div>
+    <div class="hud-box">COMBO: <span id="combo-display" class="hud-item">1x</span></div>
+    <div class="hud-box">METROS: <span id="dist-display" class="hud-item">0m</span></div>
+    <div class="hud-box">LOCAL: <span id="biome-display" class="hud-item">América do Sul</span></div>
+  </div>
+
+  <!-- Área do Jogo / Pista -->
+  <div id="game-container">
+    <div class="lane-line" style="top: 37.5vh;"></div>
+<div class="lane-line" style="top: 62.5vh;"></div>
+    <!-- Jogador -->
+    <div id="player">
+
+    </div>
+
+    <!-- Tela de Game Over -->
+    <div id="game-over-screen">
+      <h1>GAME OVER</h1>
+      <p id="final-stats">Você percorreu 0m e acumulou 0 pontos!</p>
+      <button id="restart-btn" onclick="resetGame()">JOGAR NOVAMENTE</button>
+    </div>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>
