@@ -1,0 +1,402 @@
+/* RESET E ESTILOS GERAIS */
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  font-family: 'Courier New', Courier, monospace;
+}
+
+:root {
+  --anim-duration: 0.4s;
+}
+
+body {
+  background-color: #121212;
+  color: #ffffff;
+  margin: 0;
+  padding: 0;
+  width: 100vw;
+  height: 100vh;
+  overflow: hidden;
+}
+
+/* MOLDURA FIXA NA TELA INTEIRA */
+body::after {
+  content: "";
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  box-sizing: border-box;
+  border: 10px solid #2ecc71; /* Cor inicial */
+  z-index: 100;
+  pointer-events: none;
+  transition: border-color 0.8s ease;
+
+  /* Ativa a animação pulsante em loop contínuo */
+  animation: borderPulse 1.5s ease-in-out infinite;
+}
+/* MUDANÇA DE COR DA BORDA POR BIOMA */
+body.biome-america-do-sul::after { border-color: #21f305; } /* Verde Esmeralda */
+body.biome-asia::after           { border-color: #f10f0f; } /* Amarelo Ouro */
+body.biome-africa::after         { border-color: #f5de0d; } /* Laranja Terroso */
+body.biome-europa::after         { border-color: #ad14d3; } /* Azul */
+body.biome-antartida::after      { border-color: #8becec; } /* Ciano */
+
+@keyframes borderPulse {
+  0%, 100% {
+    opacity: 1;
+    filter: drop-shadow(0 0 2px currentColor);
+  }
+  50% {
+    opacity: 0.5;
+    filter: drop-shadow(0 0 10px currentColor);
+  }
+}
+/* CONTAINER DA PISTA (ASFALTO) */
+#game-container {
+  position: relative;
+  width: 100vw;
+  height: 100vh;
+  background-color: #3a3a3a;
+  overflow: hidden;
+}
+
+/* CALÇADAS (SUPERIOR E INFERIOR) */
+@keyframes moveSidewalk {
+  from { background-position-x: 0px; }
+  to { background-position-x: -64px; }
+}
+
+#game-container::before,
+#game-container::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  width: 100%;
+  height: 80px;
+  z-index: 2;
+  background: repeating-linear-gradient(90deg, #bdc3c7, #bdc3c7 60px, #95a5a6 60px, #95a5a6 64px);
+  animation: moveSidewalk var(--anim-duration) linear infinite;
+}
+
+#game-container::before {
+  top: 0;
+  border-bottom: 4px solid #7f8c8d;
+}
+
+#game-container::after {
+  bottom: 0;
+  border-top: 4px solid #7f8c8d;
+}
+
+/* LINHAS DA PISTA (DIVISÓRIAS) */
+@keyframes moveLines {
+  from { background-position-x: 0px; }
+  to { background-position-x: -70px; }
+}
+
+.lane-line {
+  position: absolute;
+  left: 0;
+  width: 100%;
+  height: 6px;
+  z-index: 1;
+  background: repeating-linear-gradient(90deg, #f1c40f 0px, #f1c40f 35px, transparent 35px, transparent 70px);
+  opacity: 1;
+  animation: moveLines var(--anim-duration) linear infinite;
+}
+
+.line-1 {
+  top: calc(80px + (100vh - 160px) / 3);
+}
+
+.line-2 {
+  top: calc(80px + ((100vh - 160px) / 3) * 2);
+}
+
+/* HUD (PAINEL SUPERIOR) */
+#hud-container {
+  position: absolute;
+  top: 15px;
+  left: 20px;
+  right: 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  z-index: 10;
+  font-family: 'Arial', sans-serif;
+  font-weight: bold;
+}
+
+.hud-card {
+  background: rgba(255, 255, 255, 0.95);
+  padding: 16px 26px;
+  border-radius: 10px;
+  box-shadow: 0 6px 14px rgba(0, 0, 0, 0.3);
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-size: 26px;
+  color: #1e293b;
+}
+
+.hud-lives { border-left: 5px solid #dc2626; }
+.hud-lives span { color: #b91c1c; }
+
+.hud-score { border-left: 5px solid #d97706; }
+.hud-score span { color: #b45309; }
+
+.hud-combo { border-left: 5px solid #ea580c; }
+.hud-combo span { color: #c2410c; }
+
+.hud-distance { border-left: 5px solid #2563eb; }
+.hud-distance span { color: #1d4ed8; }
+
+/* Transição suave do card do bioma */
+.hud-biome {
+  border-left: 5px solid #059669;
+  transition: border-color 0.5s ease;
+}
+
+.hud-biome span {
+  padding: 4px 12px;
+  border-radius: 6px;
+  font-size: 22px;
+  transition: color 0.5s ease, background-color 0.5s ease;
+}
+
+/* ----------------------------------------------------
+   CORES DINÂMICAS DA ABA DO BIOMA NO HUD
+   ---------------------------------------------------- */
+
+/* América do Sul (Verde Esmeralda) */
+body.biome-america-do-sul .hud-biome { border-left-color: #21f305; }
+body.biome-america-do-sul .hud-biome span { color: #21f305; background-color: #ecfdf5; }
+
+/* Ásia (Amarelo Ouro) */
+body.biome-asia .hud-biome { border-left-color: #f10f0f; }
+body.biome-asia .hud-biome span { color: #f10f0f; background-color: #fffbeb; }
+
+/* África (Laranja Terroso) */
+body.biome-africa .hud-biome { border-left-color: #f5de0d; }
+body.biome-africa .hud-biome span { color: #f5de0d; background-color: #fff7ed; }
+
+/* Europa (Azul) */
+body.biome-europa .hud-biome { border-left-color: #ad14d3; }
+body.biome-europa .hud-biome span { color: #ad14d3; background-color: #eff6ff; }
+
+/* Antártida (Ciano / Gelo) */
+body.biome-antartida .hud-biome { border-left-color: #8becec; }
+body.biome-antartida .hud-biome span { color: #8becec; background-color: #ecfeff; }
+
+/* PERSONAGEM (JOGADOR) */
+#player {
+  width: 136px;
+  height: 126px;
+  position: absolute;
+  left: 80px;
+  background-image: url('player_sheet.png');
+  background-size: 544px 126px;
+  background-repeat: no-repeat;
+  background-color: transparent;
+  image-rendering: pixelated;
+  z-index: 5;
+  transition: top 0.1s ease-out;
+  animation: animaBoneco 0.6s steps(4) infinite;
+}
+
+@keyframes animaBoneco {
+  from { background-position: 0px 0px; }
+  to { background-position: -544px 0px; }
+}
+
+/* ITENS E OBSTÁCULOS */
+.item {
+  width: 80px;
+  height: 80px;
+  position: absolute;
+  right: -90px;
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center;
+  background-color: transparent;
+  z-index: 4;
+}
+
+.trash {
+  filter: drop-shadow(2px 0 0 #ff4757) drop-shadow(-2px 0 0 #ff4757) drop-shadow(0 2px 0 #ff4757) drop-shadow(0 -2px 0 #ff4757);
+}
+
+.nature {
+  filter: drop-shadow(2px 0 0 #2ed573) drop-shadow(-2px 0 0 #2ed573) drop-shadow(0 2px 0 #2ed573) drop-shadow(0 -2px 0 #2ed573);
+}
+
+/* TELA DE GAME OVER */
+/* TELA DE GAME OVER (AMPLIADA E EM VERMELHO VIBRANTE) */
+#game-over-screen {
+  display: none;
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  /* Fundo dramático com gradiente radial em tons de vermelho e vinho escuro */
+  background: radial-gradient(circle, rgba(140, 10, 25, 0.92) 0%, rgba(20, 2, 5, 0.97) 100%);
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  z-index: 200;
+  backdrop-filter: blur(4px);
+}
+
+/* Título GAME OVER pulsante e com brilho Neon */
+#game-over-screen h1 {
+  color: #ff2a2a;
+  font-size: 72px; /* Dobrado de tamanho */
+  font-weight: 900;
+  letter-spacing: 6px;
+  margin-bottom: 25px;
+  animation: pulseRedTitle 1.2s ease-in-out infinite alternate;
+}
+
+@keyframes pulseRedTitle {
+  from {
+    transform: scale(1);
+    text-shadow: 0 0 10px #ff0000, 0 0 20px #ff0000;
+  }
+  to {
+    transform: scale(1.08);
+    text-shadow: 0 0 20px #ff0000, 0 0 40px #ff3333, 0 0 70px #ff0000;
+  }
+}
+
+/* Caixa das estatísticas finais */
+#final-stats {
+  font-size: 26px; /* Aumentado para melhor leitura */
+  margin-bottom: 35px;
+  color: #ffffff;
+  background: rgba(0, 0, 0, 0.5);
+  padding: 14px 32px;
+  border-radius: 8px;
+  border: 2px solid #ff4757;
+  box-shadow: 0 0 20px rgba(255, 71, 87, 0.4);
+}
+
+/* Botão em degradê vermelho vibrante */
+#restart-btn {
+  padding: 18px 42px;
+  font-size: 22px;
+  font-weight: bold;
+  color: #ffffff;
+  background: linear-gradient(135deg, #ff2a2a 0%, #a00000 100%);
+  border: 3px solid #ff6b6b;
+  cursor: pointer;
+  border-radius: 8px;
+  box-shadow: 0 0 25px rgba(255, 42, 42, 0.7);
+  transition: all 0.2s ease-in-out;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+}
+
+#restart-btn:hover {
+  background: linear-gradient(135deg, #ff5252 0%, #c40000 100%);
+  transform: scale(1.1);
+  box-shadow: 0 0 40px rgba(255, 0, 0, 1);
+  border-color: #ffffff;
+}
+
+/* TELA INICIAL (START SCREEN) */
+#start-screen {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: radial-gradient(circle, rgba(15, 23, 42, 0.95) 0%, rgba(2, 6, 23, 0.98) 100%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  z-index: 250; /* Fica acima de tudo antes do jogo começar */
+  backdrop-filter: blur(4px);
+}
+
+/* TELA INICIAL COM ARTE DE FUNDO COMPLETA */
+#start-screen {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  /* Filtro escuro suave + Sua Imagem de Fundo */
+  background: linear-gradient(rgba(0, 0, 0, 0.45), rgba(0, 0, 0, 0.75)), url('fundo_menu.png');
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  image-rendering: pixelated; /* Mantém os pixels da sua arte cravados sem borrar */
+  
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  z-index: 250;
+}
+
+@keyframes pulseTitle {
+  from {
+    transform: scale(1);
+    text-shadow: 0 0 10px #00ffcc, 0 0 20px #00ffcc;
+  }
+  to {
+    transform: scale(1.05);
+    text-shadow: 0 0 20px #00ffcc, 0 0 40px #00ffcc;
+  }
+}
+
+.subtitle {
+  font-size: 20px;
+  color: #e2e8f0;
+  margin-bottom: 25px;
+}
+
+.controls-card {
+  background: rgba(255, 255, 255, 0.08);
+  padding: 16px 32px;
+  border-radius: 8px;
+  border: 1px solid rgba(0, 255, 204, 0.3);
+  margin-bottom: 30px;
+  font-size: 18px;
+  box-shadow: 0 0 15px rgba(0, 0, 0, 0.5);
+}
+
+.controls-card p {
+  margin: 6px 0;
+  color: #cbd5e1;
+}
+
+.controls-card strong {
+  color: #00ffcc;
+}
+
+#start-btn {
+  padding: 18px 48px;
+  font-size: 24px;
+  font-weight: bold;
+  color: #121212;
+  background: linear-gradient(135deg, #00ffcc 0%, #00b386 100%);
+  border: 3px solid #ffffff;
+  cursor: pointer;
+  border-radius: 8px;
+  box-shadow: 0 0 25px rgba(0, 255, 204, 0.6);
+  transition: all 0.2s ease-in-out;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+}
+
+#start-btn:hover {
+  transform: scale(1.1);
+  box-shadow: 0 0 40px rgba(0, 255, 204, 1);
+  border-color: #00ffcc;
+}

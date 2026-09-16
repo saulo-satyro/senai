@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Corra pelo Mundo - Alpha</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <!-- Painel do Topo (HUD) -->
+  <div id="hud-container">
+    <div class="hud-card hud-lives">
+        Vidas: <span id="lives-display">♥♥♥</span>
+    </div>
+    <div class="hud-card hud-score">
+        Pontos: <span id="score-display">0</span>
+    </div>
+    <div class="hud-card hud-combo">
+        Combo: <span id="combo-display">1x</span>
+    </div>
+    <div class="hud-card hud-distance">
+        Distância: <span id="dist-display">0m</span>
+    </div>
+    <div class="hud-card hud-biome">
+        Bioma: <span id="biome-display">América do Sul</span>
+    </div>
+  </div>
+
+  <!-- Área do Jogo / Pista -->
+  <!-- Área do Jogo / Pista -->
+  <div id="game-container">
+    <!-- Tela Inicial -->
+    <div id="start-screen">
+      <h1>CORRA PELO MUNDO</h1>
+      <p class="subtitle">Evite os obstáculos e recicle o máximo de lixo que puder!</p>
+      
+      <div class="controls-card">
+        <p><strong>[ W / ↑ ]</strong> Mover para Cima</p>
+        <p><strong>[ S / ↓ ]</strong> Mover para Baixo</p>
+      </div>
+
+      <button id="start-btn" onclick="startGame()">JOGAR</button>
+    </div>
+
+    <!-- Linhas divisórias das 3 faixas -->
+    <div class="lane-line line-1"></div>
+    <div class="lane-line line-2"></div>
+
+    <!-- Jogador -->
+    <div id="player"></div>
+
+    <!-- Tela de Game Over -->
+    <div id="game-over-screen">
+      <h1>GAME OVER</h1>
+      <p id="final-stats">Você percorreu 0m e acumulou 0 pontos!</p>
+      <button id="restart-btn" onclick="resetGame()">JOGAR NOVAMENTE</button>
+    </div>
+  </div>
+  <script src="script.js"></script>
+</body>
+</html>
