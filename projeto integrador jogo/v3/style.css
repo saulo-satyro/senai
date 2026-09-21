@@ -1,0 +1,432 @@
+/* RESET E ESTILOS GERAIS */
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  font-family: 'Courier New', Courier, monospace;
+}
+
+:root {
+  --anim-duration: 0.4s;
+}
+
+body {
+  background-color: #121212;
+  color: #ffffff;
+  margin: 0;
+  padding: 0;
+  width: 100vw;
+  height: 100vh;
+  overflow: hidden;
+}
+
+/* MOLDURA FIXA PULSANTE */
+body::after {
+  content: "";
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  box-sizing: border-box;
+  border: 10px solid #2ecc71;
+  z-index: 100;
+  pointer-events: none;
+  transition: border-color 0.8s ease;
+  animation: borderPulse 1.5s ease-in-out infinite;
+}
+
+/* MUDANÇA DE COR DA BORDA POR BIOMA */
+body.biome-america-do-sul::after { border-color: #21f305; }
+body.biome-asia::after           { border-color: #f10f0f; }
+body.biome-africa::after         { border-color: #f5de0d; }
+body.biome-europa::after         { border-color: #ad14d3; }
+body.biome-antartida::after      { border-color: #8becec; }
+
+@keyframes borderPulse {
+  0%, 100% {
+    opacity: 1;
+    filter: drop-shadow(0 0 2px currentColor);
+  }
+  50% {
+    opacity: 0.5;
+    filter: drop-shadow(0 0 10px currentColor);
+  }
+}
+
+/* CONTAINER DA PISTA (ASFALTO) */
+#game-container {
+  position: relative;
+  width: 100vw;
+  height: 100vh;
+  background-color: #3a3a3a;
+  overflow: hidden;
+}
+
+/* CALÇADAS (SUPERIOR E INFERIOR) */
+@keyframes moveSidewalk {
+  from { background-position-x: 0px; }
+  to { background-position-x: -64px; }
+}
+
+#game-container::before,
+#game-container::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  width: 100%;
+  height: 80px;
+  z-index: 2;
+  background: repeating-linear-gradient(90deg, #bdc3c7, #bdc3c7 60px, #95a5a6 60px, #95a5a6 64px);
+  animation: moveSidewalk var(--anim-duration) linear infinite;
+}
+
+#game-container::before {
+  top: 0;
+  border-bottom: 4px solid #7f8c8d;
+}
+
+#game-container::after {
+  bottom: 0;
+  border-top: 4px solid #7f8c8d;
+}
+
+/* LINHAS DIVISÓRIAS DA PISTA */
+@keyframes moveLines {
+  from { background-position-x: 0px; }
+  to { background-position-x: -70px; }
+}
+
+.lane-line {
+  position: absolute;
+  left: 0;
+  width: 100%;
+  height: 6px;
+  z-index: 1;
+  background: repeating-linear-gradient(90deg, #f1c40f 0px, #f1c40f 35px, transparent 35px, transparent 70px);
+  opacity: 1;
+  animation: moveLines var(--anim-duration) linear infinite;
+}
+
+.line-1 { top: calc(80px + (100vh - 160px) / 3); }
+.line-2 { top: calc(80px + ((100vh - 160px) / 3) * 2); }
+
+/* HUD (PAINEL SUPERIOR) */
+#hud-container {
+  position: absolute;
+  top: 15px;
+  left: 20px;
+  right: 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  z-index: 10;
+  font-family: 'Arial', sans-serif;
+  font-weight: bold;
+}
+
+.hud-card {
+  background: rgba(255, 255, 255, 0.95);
+  padding: 16px 26px;
+  border-radius: 10px;
+  box-shadow: 0 6px 14px rgba(0, 0, 0, 0.3);
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-size: 26px;
+  color: #1e293b;
+}
+
+.hud-lives { border-left: 5px solid #dc2626; }
+.hud-lives span { color: #b91c1c; }
+
+.hud-score { border-left: 5px solid #d97706; }
+.hud-score span { color: #b45309; }
+
+.hud-combo { border-left: 5px solid #ea580c; }
+.hud-combo span { color: #c2410c; }
+
+.hud-distance { border-left: 5px solid #2563eb; }
+.hud-distance span { color: #1d4ed8; }
+
+.hud-biome {
+  border-left: 5px solid #059669;
+  transition: border-color 0.5s ease;
+}
+
+.hud-biome span {
+  padding: 4px 12px;
+  border-radius: 6px;
+  font-size: 22px;
+  transition: color 0.5s ease, background-color 0.5s ease;
+}
+
+/* CORES DINÂMICAS DO BIOMA NO HUD */
+body.biome-america-do-sul .hud-biome { border-left-color: #21f305; }
+body.biome-america-do-sul .hud-biome span { color: #21f305; background-color: #ecfdf5; }
+
+body.biome-asia .hud-biome { border-left-color: #f10f0f; }
+body.biome-asia .hud-biome span { color: #f10f0f; background-color: #fffbeb; }
+
+body.biome-africa .hud-biome { border-left-color: #f5de0d; }
+body.biome-africa .hud-biome span { color: #f5de0d; background-color: #fff7ed; }
+
+body.biome-europa .hud-biome { border-left-color: #ad14d3; }
+body.biome-europa .hud-biome span { color: #ad14d3; background-color: #eff6ff; }
+
+body.biome-antartida .hud-biome { border-left-color: #8becec; }
+body.biome-antartida .hud-biome span { color: #8becec; background-color: #ecfeff; }
+
+/* PERSONAGEM (JOGADOR) */
+#player {
+  width: 136px;
+  height: 126px;
+  position: absolute;
+  left: 80px;
+  background-image: url('player_sheet.png');
+  background-size: 544px 126px;
+  background-repeat: no-repeat;
+  background-color: transparent;
+  image-rendering: pixelated;
+  z-index: 5;
+  transition: top 0.1s ease-out;
+  animation: animaBoneco 0.6s steps(4) infinite;
+}
+
+@keyframes animaBoneco {
+  from { background-position: 0px 0px; }
+  to { background-position: -544px 0px; }
+}
+
+/* ITENS E OBSTÁCULOS */
+.item {
+  width: 80px;
+  height: 80px;
+  position: absolute;
+  right: -90px;
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center;
+  background-color: transparent;
+  z-index: 4;
+}
+
+.trash {
+  filter: drop-shadow(2px 0 0 #ff4757) drop-shadow(-2px 0 0 #ff4757) drop-shadow(0 2px 0 #ff4757) drop-shadow(0 -2px 0 #ff4757);
+}
+
+.nature {
+  filter: drop-shadow(2px 0 0 #2ed573) drop-shadow(-2px 0 0 #2ed573) drop-shadow(0 2px 0 #2ed573) drop-shadow(0 -2px 0 #2ed573);
+}
+
+/* TELA DE GAME OVER */
+#game-over-screen {
+  display: none;
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: radial-gradient(circle, rgba(140, 10, 25, 0.92) 0%, rgba(20, 2, 5, 0.97) 100%);
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  z-index: 200;
+  backdrop-filter: blur(4px);
+}
+
+#game-over-screen h1 {
+  color: #ff2a2a;
+  font-size: 72px;
+  font-weight: 900;
+  letter-spacing: 6px;
+  margin-bottom: 25px;
+  animation: pulseRedTitle 1.2s ease-in-out infinite alternate;
+}
+
+@keyframes pulseRedTitle {
+  from {
+    transform: scale(1);
+    text-shadow: 0 0 10px #ff0000, 0 0 20px #ff0000;
+  }
+  to {
+    transform: scale(1.08);
+    text-shadow: 0 0 20px #ff0000, 0 0 40px #ff3333, 0 0 70px #ff0000;
+  }
+}
+
+#final-stats {
+  font-size: 26px;
+  margin-bottom: 35px;
+  color: #ffffff;
+  background: rgba(0, 0, 0, 0.5);
+  padding: 14px 32px;
+  border-radius: 8px;
+  border: 2px solid #ff4757;
+  box-shadow: 0 0 20px rgba(255, 71, 87, 0.4);
+}
+
+#restart-btn {
+  padding: 18px 42px;
+  font-size: 22px;
+  font-weight: bold;
+  color: #ffffff;
+  background: linear-gradient(135deg, #ff2a2a 0%, #a00000 100%);
+  border: 3px solid #ff6b6b;
+  cursor: pointer;
+  border-radius: 8px;
+  box-shadow: 0 0 25px rgba(255, 42, 42, 0.7);
+  transition: all 0.2s ease-in-out;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+}
+
+#restart-btn:hover {
+  background: linear-gradient(135deg, #ff5252 0%, #c40000 100%);
+  transform: scale(1.1);
+  box-shadow: 0 0 40px rgba(255, 0, 0, 1);
+  border-color: #ffffff;
+}
+
+/* TELA INICIAL (START SCREEN) */
+/* ====================================================
+   TELA INICIAL - SEM NEON (ESTILO LIMPO / RETRO FLAT)
+   ==================================================== */
+/* ====================================================
+   TELA INICIAL COMPLETA (SEM CAIXA / ESPALHADA NA TELA)
+   ==================================================== */
+/* ====================================================
+   TELA INICIAL 100% OPACA (ESCONDE O JOGO COMPLETAMENTE)
+   ==================================================== */
+/* ====================================================
+   TELA INICIAL LIMPA (APENAS FUNDO, LOGO E BOTÃO)
+   ==================================================== */
+/* ====================================================
+   TELA INICIAL COM GIF DE FUNDO EM TELA CHEIA
+   ==================================================== */
+#start-screen {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background-color: #000000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 999;
+  overflow: hidden;
+}
+
+/* GIF DE FUNDO - Ocupa 100% da tela preservando proporção */
+#bg-start-gif {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover; /* Preenche a tela toda sem esticar */
+  z-index: 1;
+  image-rendering: pixelated; /* Mantém o estilo Retro/Pixel Art */
+}
+
+/* CONTAINER DA LOGO E BOTÃO (SOBREPOEM O GIF) */
+/* CONTAINER CENTRAL - Deslocado para cima */
+.start-content {
+  position: relative;
+  z-index: 2;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 25px;            /* Reduzido o espaço para aproximar o botão da logo */
+  transform: translateY(-50px); /* Puxa todo o bloco 50px para cima */
+}
+
+/* LOGO - Tamanho Aumentado */
+#game-logo {
+  width: 85vw;          /* Aumentado de 75vw para 85vw */
+  max-width: 900px;     /* Limite máximo para ecrãs grandes */
+  max-height: 60vh;     /* Aumentado de 45vh para 60vh */
+  object-fit: contain;
+  filter: drop-shadow(0 10px 20px rgba(0, 0, 0, 0.8));
+}
+
+/* BOTÃO INICIAR */
+#start-btn {
+  padding: 18px 52px;
+  font-size: 26px;
+  font-weight: bold;
+  color: #ffffff;
+  background: #27ae60;
+  border: 3px solid #ffffff;
+  border-radius: 10px;
+  cursor: pointer;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  transition: transform 0.15s ease, background 0.15s ease;
+  box-shadow: 0 6px 15px rgba(0, 0, 0, 0.5);
+}
+
+#start-btn:hover {
+  background: #219653;
+  transform: scale(1.06);
+}
+
+/* ====================================================
+   TELA "COMO JOGAR" (TUTORIAL)
+   ==================================================== */
+#tutorial-screen {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(15, 23, 42, 0.96); /* Fundo escuro e elegante */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  z-index: 998;
+}
+
+.tutorial-card {
+  background: #1e293b;
+  border: 3px solid #ffffff;
+  border-radius: 12px;
+  padding: 28px 36px;
+  max-width: 650px;
+  width: 90%;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.7);
+}
+
+.tutorial-card h2 {
+  color: #f1c40f;
+  font-size: 34px;
+  font-weight: 900;
+  letter-spacing: 2px;
+}
+
+#play-now-btn {
+  margin-top: 8px;
+  padding: 16px 42px;
+  font-size: 24px;
+  font-weight: bold;
+  color: #ffffff;
+  background: #27ae60;
+  border: 2px solid #ffffff;
+  border-radius: 8px;
+  cursor: pointer;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  transition: transform 0.15s ease, background 0.15s ease;
+}
+
+#play-now-btn:hover {
+  background: #219653;
+  transform: scale(1.04);
+}

@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Corra pelo Mundo - Alpha</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <!-- Painel do Topo (HUD) -->
+  <div id="hud-container">
+    <div class="hud-card hud-lives">
+      Vidas: <span id="lives-display">♥♥♥</span>
+    </div>
+    <div class="hud-card hud-score">
+      Pontos: <span id="score-display">0</span>
+    </div>
+    <div class="hud-card hud-combo">
+      Combo: <span id="combo-display">1x</span>
+    </div>
+    <div class="hud-card hud-distance">
+      Distância: <span id="dist-display">0m</span>
+    </div>
+    <div class="hud-card hud-biome">
+      Bioma: <span id="biome-display">América do Sul</span>
+    </div>
+  </div>
+
+  <!-- Área do Jogo / Pista -->
+  <div id="game-container">
+    
+    <!-- Tela Inicial -->
+    <!-- Tela Inicial -->
+    <div id="start-screen">
+      <img src="fundo_menu.gif" id="bg-start-gif" alt="Fundo Animado">
+
+      <div class="start-content">
+        <img src="logo.png" id="game-logo" alt="Logo do Jogo">
+        <button id="start-btn" onclick="startGame()">INICIAR CORRIDA</button>
+      </div>
+    </div>
+
+    <!-- Linhas divisórias das 3 faixas -->
+    <div class="lane-line line-1"></div>
+    <div class="lane-line line-2"></div>
+
+    <!-- Jogador -->
+    <div id="player"></div>
+
+    <!-- Tela de Game Over -->
+    <div id="game-over-screen">
+      <h1>GAME OVER</h1>
+      <p id="final-stats">Você percorreu 0m e acumulou 0 pontos!</p>
+      <button id="restart-btn">JOGAR NOVAMENTE</button>
+    </div>
+
+    <!-- Tela Inicial (Logo + GIF + Botão) -->
+  <div id="start-screen">
+    <img src="fundo_menu.gif" id="bg-start-gif" alt="Fundo Animado">
+
+    <div class="start-content">
+      <img src="logo.png" id="game-logo" alt="Logo do Jogo">
+      <button id="start-btn">INICIAR CORRIDA</button>
+    </div>
+  </div>
+
+  <!-- Tela "Como Jogar" (Tutorial) -->
+  <div id="tutorial-screen" style="display: none;">
+    <div class="tutorial-card">
+      <h2>COMO JOGAR</h2>
+      
+      <div class="info-box">
+        <h3>🎯 OBJETIVO</h3>
+        <p>Atravesse os continentes promovendo a reciclagem! <strong>Colete os lixos</strong> espalhados e <strong>desvie das árvores</strong> para não perder vidas.</p>
+      </div>
+
+      <div class="info-box">
+        <h3>🎮 COMANDOS</h3>
+        <div class="controls-grid">
+          <p><span class="key">W</span> ou <span class="key">↑</span> — Pista de Cima</p>
+          <p><span class="key">S</span> ou <span class="key">↓</span> — Pista de Baixo</p>
+        </div>
+      </div>
+
+      <div class="info-box legend-box">
+        <h3>💡 REGRAS RÁPIDAS</h3>
+        <p>🗑️ <strong>Lixos:</strong> Garante +100 Pontos e aumenta o Multiplicador de Combo.</p>
+        <p>🌳 <strong>Árvores:</strong> Obstáculos da natureza. Colidir faz você perder 1 Vida!</p>
+        <p>🌍 <strong>Biomas:</strong> Conforme você avança, o bioma muda e a velocidade aumenta.</p>
+      </div>
+
+      <button id="play-now-btn">VAMOS LÁ!</button>
+    </div>
+  </div>
+
+  </div>
+
+
+  <script src="script.js"></script>
+</body>
+</html>
