@@ -13,12 +13,6 @@ O projeto foi desenvolvido em HTML5, CSS3 e JavaScript Vanilla (ES6), funcionand
 2. Extraia o arquivo .zip em qualquer pasta do seu computador.
 3. Clique duas vezes no arquivo index.html para abrir e jogar diretamente em qualquer navegador web.
 
-### Opção 2: Jogar Online (GitHub Pages)
-Acesse a versão alfa jogável diretamente pelo navegador:  
-https://seu-usuario.github.io/nome-do-repositorio/ (substitua pelo seu link do GitHub Pages)
-
----
-
 ## Controles e Jogabilidade
 
 | Comando | Teclas | Ação |
