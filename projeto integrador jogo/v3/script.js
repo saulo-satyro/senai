@@ -3,20 +3,18 @@ window.addEventListener('DOMContentLoaded', () => {
   const container = document.getElementById('game-container');
   const gameOverScreen = document.getElementById('game-over-screen');
   const startScreen = document.getElementById('start-screen');
-  const tutorialScreen = document.getElementById('tutorial-screen'); // Novo
+  const tutorialScreen = document.getElementById('tutorial-screen'); 
   const startBtn = document.getElementById('start-btn');
-  const playNowBtn = document.getElementById('play-now-btn');       // Novo
+  const playNowBtn = document.getElementById('play-now-btn');       
   const restartBtn = document.getElementById('restart-btn');
 
-  // ... (o restante das tuas variáveis permanece igual) ...
 
-  // Função para abrir o tutorial ao clicar em INICIAR CORRIDA
   function showTutorial() {
     if (startScreen) startScreen.style.display = 'none';
     if (tutorialScreen) tutorialScreen.style.display = 'flex';
   }
 
-  // Função para começar o jogo de facto ao clicar em VAMOS LÁ!
+
   function startGame() {
     if (tutorialScreen) tutorialScreen.style.display = 'none';
 
@@ -30,12 +28,12 @@ window.addEventListener('DOMContentLoaded', () => {
     gameLoop();
   }
 
-  // Vincular os cliques aos botões
+
   if (startBtn) startBtn.addEventListener('click', showTutorial);
   if (playNowBtn) playNowBtn.addEventListener('click', startGame);
   if (restartBtn) restartBtn.addEventListener('click', resetGame);
 
-  // ... (restante do código igual) ...
+
 });
 
   const trashSprites = ['lixo1.png', 'lixo2.png', 'lixo3.png', 'lixo4.png', 'lixo5.png', 'lixo6.png', 'lixo7.png', 'lixo8.png'];
@@ -206,10 +204,9 @@ window.addEventListener('DOMContentLoaded', () => {
     gameLoop();
   }
 
-  // Event Listeners dos Botões
+ 
   if (startBtn) startBtn.addEventListener('click', startGame);
   if (restartBtn) restartBtn.addEventListener('click', resetGame);
 
   window.addEventListener('resize', updatePlayerPos);
   updatePlayerPos();
-});
