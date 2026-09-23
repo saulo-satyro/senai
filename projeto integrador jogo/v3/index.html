@@ -8,6 +8,7 @@
 </head>
 <body>
 
+  <!-- Painel do Topo (HUD) -->
   <div id="hud-container">
     <div class="hud-card hud-lives">
       Vidas: <span id="lives-display">♥♥♥</span>
@@ -26,36 +27,40 @@
     </div>
   </div>
 
-
+  <!-- Área do Jogo / Pista -->
   <div id="game-container">
     
->
-    <div id="start-screen">
-      <img src="fundo_menu.gif" id="bg-start-gif" alt="Fundo Animado">
 
-      <div class="start-content">
-        <img src="logo.png" id="game-logo" alt="Logo do Jogo">
-        <button id="start-btn" onclick="startGame()">INICIAR CORRIDA</button>
-      </div>
+  <!-- Tela Inicial -->
+  <div id="start-screen">
+    <img src="fundo_menu.gif" id="bg-start-gif" alt="Fundo Animado">
+
+    <!-- Conteúdo Centralizado (Logo do Jogo + Botão) -->
+    <div class="start-content">
+      <img src="logo.png" id="game-logo" alt="Logo do Jogo">
+      <button id="start-btn">INICIAR CORRIDA</button>
     </div>
 
-
+    <!-- Logo da Equipa (Fixa no Canto Inferior Direito) -->
+    <img src="team_logo.png" id="team-logo" alt="Logo da Equipe">
+  </div>
+    <!-- Linhas divisórias das 3 faixas -->
     <div class="lane-line line-1"></div>
     <div class="lane-line line-2"></div>
 
-
+    <!-- Jogador -->
     <div id="player"></div>
 
-
+    <!-- Tela de Game Over -->
     <div id="game-over-screen">
       <h1>GAME OVER</h1>
       <p id="final-stats">Você percorreu 0m e acumulou 0 pontos!</p>
       <button id="restart-btn">JOGAR NOVAMENTE</button>
     </div>
 
-    
 
 
+  <!-- Tela "Como Jogar" (Tutorial) -->
   <div id="tutorial-screen" style="display: none;">
     <div class="tutorial-card">
       <h2>COMO JOGAR</h2>

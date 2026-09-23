@@ -1,43 +1,34 @@
 window.addEventListener('DOMContentLoaded', () => {
+  // Elementos do DOM
   const player = document.getElementById('player');
   const container = document.getElementById('game-container');
   const gameOverScreen = document.getElementById('game-over-screen');
   const startScreen = document.getElementById('start-screen');
-  const tutorialScreen = document.getElementById('tutorial-screen'); 
+  const tutorialScreen = document.getElementById('tutorial-screen');
   const startBtn = document.getElementById('start-btn');
-  const playNowBtn = document.getElementById('play-now-btn');       
+  const playNowBtn = document.getElementById('play-now-btn');
   const restartBtn = document.getElementById('restart-btn');
 
+  // Listas de Sprites
+  const trashSprites = [
+    'lixo1.png', 
+    'lixo2.png', 
+    'lixo3.png', 
+    'lixo4.png', 
+    'lixo5.png', 
+    'lixo6.png', 
+    'lixo8.png'
+  ];
 
-  function showTutorial() {
-    if (startScreen) startScreen.style.display = 'none';
-    if (tutorialScreen) tutorialScreen.style.display = 'flex';
-  }
+  const treeSprites = [
+    'arvore1.png',
+    'arvore2.png',
+    'arvore3.png',
+    'arvore4.png',
+    'arvore5.png'
+  ];
 
-
-  function startGame() {
-    if (tutorialScreen) tutorialScreen.style.display = 'none';
-
-    score = 0; lives = 3; combo = 1; distance = 0; baseSpeed = 5;
-    currentLane = 1; isGameOver = false;
-    document.body.className = '';
-
-    updatePlayerPos();
-    if (spawnTimer) clearInterval(spawnTimer);
-    spawnTimer = setInterval(spawnItem, 700);
-    gameLoop();
-  }
-
-
-  if (startBtn) startBtn.addEventListener('click', showTutorial);
-  if (playNowBtn) playNowBtn.addEventListener('click', startGame);
-  if (restartBtn) restartBtn.addEventListener('click', resetGame);
-
-
-});
-
-  const trashSprites = ['lixo1.png', 'lixo2.png', 'lixo3.png', 'lixo4.png', 'lixo5.png', 'lixo6.png', 'lixo7.png', 'lixo8.png'];
-
+  // Variáveis de Estado do Jogo
   let currentLane = 1;
   let score = 0;
   let lives = 3;
@@ -45,8 +36,10 @@ window.addEventListener('DOMContentLoaded', () => {
   let distance = 0;
   let baseSpeed = 5;
   let isGameOver = false;
+  let isGameStarted = false;
   let spawnTimer = null;
 
+  // Cálculo da Posição Y das 3 Pistas
   function getLaneY(index) {
     const playableHeight = window.innerHeight - 160;
     const laneCenters = [
@@ -71,18 +64,6 @@ window.addEventListener('DOMContentLoaded', () => {
     return currentSpeed;
   }
 
-  window.addEventListener('keydown', (e) => {
-    if (isGameOver || (startScreen && startScreen.style.display === 'none' ? false : true)) return;
-    const key = e.key.toLowerCase();
-
-    if (key === 'arrowup' || key === 'w') {
-      if (currentLane > 0) currentLane--;
-    } else if (key === 'arrowdown' || key === 's') {
-      if (currentLane < 2) currentLane++;
-    }
-    updatePlayerPos();
-  });
-
   function getBiome(dist) {
     if (dist < 1000) return "América do Sul";
     if (dist < 2500) return "Ásia";
@@ -91,36 +72,86 @@ window.addEventListener('DOMContentLoaded', () => {
     return "Antártida";
   }
 
-  function spawnItem() {
-    if (isGameOver) return;
-    const item = document.createElement('div');
-    
-    const isTrash = Math.random() > 0.35; 
-    const randomLane = Math.floor(Math.random() * 3);
-
-    item.className = `item ${isTrash ? 'trash' : 'nature'}`;
-    item.dataset.isTrash = isTrash;
-
-    if (isTrash) {
-      const randomTrash = trashSprites[Math.floor(Math.random() * trashSprites.length)];
-      item.style.backgroundImage = `url('${randomTrash}')`;
-    } else {
-      item.style.backgroundImage = "url('arvore.png')";
-    }
-
-    item.style.top = (getLaneY(randomLane) + 23) + 'px';
-    item.style.left = (window.innerWidth + 60) + 'px';
-
-    container.appendChild(item);
+  // Navegação de Telas
+  function showTutorial() {
+    if (startScreen) startScreen.style.display = 'none';
+    if (tutorialScreen) tutorialScreen.style.display = 'flex';
   }
 
+  function startGame() {
+    if (startScreen) startScreen.style.display = 'none';
+    if (tutorialScreen) tutorialScreen.style.display = 'none';
+    if (gameOverScreen) gameOverScreen.style.display = 'none';
+
+    // Limpa itens antigos da tela
+    document.querySelectorAll('.item').forEach(i => i.remove());
+
+    score = 0; 
+    lives = 3; 
+    combo = 1; 
+    distance = 0; 
+    baseSpeed = 5;
+    currentLane = 1; 
+    isGameOver = false;
+    isGameStarted = true;
+    document.body.className = '';
+
+    updatePlayerPos();
+    if (spawnTimer) clearInterval(spawnTimer);
+    spawnTimer = setInterval(spawnItem, 700);
+    gameLoop();
+  }
+
+  function triggerGameOver() {
+    isGameOver = true;
+    isGameStarted = false;
+    clearInterval(spawnTimer);
+    document.getElementById('final-stats').innerText = 
+      `Você percorreu ${distance}m e acumulou ${score} pontos!`;
+    if (gameOverScreen) gameOverScreen.style.display = 'flex';
+  }
+
+  // Geração de Obstáculos e Lixos
+  // Geração de Obstáculos e Lixos
+  function spawnItem() {
+    if (isGameOver || !isGameStarted) return;
+    const targetContainer = container || document.getElementById('game-container');
+    if (!targetContainer) return;
+
+    const item = document.createElement('img');
+    // Adiciona AMBAS as classes para manter o estilo do CSS e a colisão do JS
+    item.classList.add('item', 'game-item');
+
+    // Chance de 40% Árvore / 60% Lixo
+    const isObstacle = Math.random() < 0.4;
+
+    if (isObstacle) {
+      const randomTree = treeSprites[Math.floor(Math.random() * treeSprites.length)];
+      item.src = randomTree;
+      item.dataset.isTrash = 'false';
+      item.alt = 'Árvore';
+    } else {
+      const randomTrash = trashSprites[Math.floor(Math.random() * trashSprites.length)];
+      item.src = randomTrash;
+      item.dataset.isTrash = 'true';
+      item.alt = 'Lixo';
+    }
+
+    // Sorteia uma das 3 pistas (0, 1 ou 2)
+    const lane = Math.floor(Math.random() * 3);
+    item.style.position = 'absolute';
+    item.style.left = '100vw';
+    item.style.top = getLaneY(lane) + 'px';
+
+    targetContainer.appendChild(item);
+  }
+  // Loop Principal
   function gameLoop() {
-    if (!isGameOver) {
+    if (!isGameOver && isGameStarted) {
       distance += 1;
       baseSpeed = updateGameSpeed(distance);
 
       const currentBiome = getBiome(distance);
-
       const biomeClass = 'biome-' + currentBiome
         .toLowerCase()
         .normalize("NFD")
@@ -131,82 +162,67 @@ window.addEventListener('DOMContentLoaded', () => {
         document.body.className = biomeClass;
       }
 
-      document.getElementById('score-display').innerText = score;
-      document.getElementById('combo-display').innerText = combo + 'x';
-      document.getElementById('dist-display').innerText = distance + 'm';
-      document.getElementById('biome-display').innerText = currentBiome;
-      document.getElementById('lives-display').innerText = '♥'.repeat(Math.max(0, lives));
+      // Atualização de HUD
+      if (document.getElementById('score-display')) document.getElementById('score-display').innerText = score;
+      if (document.getElementById('combo-display')) document.getElementById('combo-display').innerText = combo + 'x';
+      if (document.getElementById('dist-display')) document.getElementById('dist-display').innerText = distance + 'm';
+      if (document.getElementById('biome-display')) document.getElementById('biome-display').innerText = currentBiome;
+      if (document.getElementById('lives-display')) document.getElementById('lives-display').innerText = '♥'.repeat(Math.max(0, lives));
 
+      // Colisão e Movimentação
       const items = document.querySelectorAll('.item');
-      const pRect = player.getBoundingClientRect();
+      if (player) {
+        const pRect = player.getBoundingClientRect();
 
-      items.forEach(item => {
-        let currentLeft = parseFloat(item.style.left);
-        currentLeft -= baseSpeed;
-        item.style.left = currentLeft + 'px';
+        items.forEach(item => {
+          let currentLeft = parseFloat(item.style.left) || window.innerWidth;
+          currentLeft -= baseSpeed;
+          item.style.left = currentLeft + 'px';
 
-        const iRect = item.getBoundingClientRect();
+          const iRect = item.getBoundingClientRect();
 
-        if (
-          pRect.left < iRect.right &&
-          pRect.right > iRect.left &&
-          pRect.top < iRect.bottom &&
-          pRect.bottom > iRect.top
-        ) {
-          if (item.dataset.isTrash === 'true') {
-            score += 100 * combo;
-            combo++;
-          } else {
-            lives--;
-            combo = 1;
+          if (
+            pRect.left < iRect.right &&
+            pRect.right > iRect.left &&
+            pRect.top < iRect.bottom &&
+            pRect.bottom > iRect.top
+          ) {
+            if (item.dataset.isTrash === 'true') {
+              score += 100 * combo;
+              combo++;
+            } else {
+              lives--;
+              combo = 1;
+            }
+            item.remove();
+            if (lives <= 0) triggerGameOver();
+          } else if (currentLeft < -90) {
+            item.remove();
           }
-          item.remove();
-          if (lives <= 0) triggerGameOver();
-        } else if (currentLeft < -90) {
-          item.remove();
-        }
-      });
+        });
+      }
 
       requestAnimationFrame(gameLoop);
     }
   }
 
-  function triggerGameOver() {
-    isGameOver = true;
-    clearInterval(spawnTimer);
-    document.getElementById('final-stats').innerText = 
-      `Você percorreu ${distance}m e acumulou ${score} pontos!`;
-    gameOverScreen.style.display = 'flex';
-  }
+  // Eventos de Botões e Teclado
+  if (startBtn) startBtn.addEventListener('click', showTutorial);
+  if (playNowBtn) playNowBtn.addEventListener('click', startGame);
+  if (restartBtn) restartBtn.addEventListener('click', startGame);
 
-  function resetGame() {
-    document.querySelectorAll('.item').forEach(i => i.remove());
-    score = 0; lives = 3; combo = 1; distance = 0; baseSpeed = 5;
-    currentLane = 1; isGameOver = false;
-    document.body.className = '';
+  window.addEventListener('keydown', (e) => {
+    if (isGameOver || !isGameStarted) return;
+    const key = e.key.toLowerCase();
+
+    if (key === 'arrowup' || key === 'w') {
+      if (currentLane > 0) currentLane--;
+    } else if (key === 'arrowdown' || key === 's') {
+      if (currentLane < 2) currentLane++;
+    }
     updatePlayerPos();
-    gameOverScreen.style.display = 'none';
-    if (spawnTimer) clearInterval(spawnTimer);
-    spawnTimer = setInterval(spawnItem, 700);
-    gameLoop();
-  }
-
-  function startGame() {
-    if (startScreen) startScreen.style.display = 'none';
-
-    score = 0; lives = 3; combo = 1; distance = 0; baseSpeed = 5;
-    currentLane = 1; isGameOver = false;
-    document.body.className = '';
-
-    updatePlayerPos();
-    if (spawnTimer) clearInterval(spawnTimer);
-    spawnTimer = setInterval(spawnItem, 700);
-    gameLoop();
-  }
-
- 
-  if (startBtn) startBtn.addEventListener('click', startGame);
-  if (restartBtn) restartBtn.addEventListener('click', resetGame);
+  });
 
   window.addEventListener('resize', updatePlayerPos);
   updatePlayerPos();
+});

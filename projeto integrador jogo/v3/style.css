@@ -288,22 +288,7 @@ body.biome-antartida .hud-biome span { color: #8becec; background-color: #ecfeff
   border-color: #ffffff;
 }
 
-/* TELA INICIAL (START SCREEN) */
-/* ====================================================
-   TELA INICIAL - SEM NEON (ESTILO LIMPO / RETRO FLAT)
-   ==================================================== */
-/* ====================================================
-   TELA INICIAL COMPLETA (SEM CAIXA / ESPALHADA NA TELA)
-   ==================================================== */
-/* ====================================================
-   TELA INICIAL 100% OPACA (ESCONDE O JOGO COMPLETAMENTE)
-   ==================================================== */
-/* ====================================================
-   TELA INICIAL LIMPA (APENAS FUNDO, LOGO E BOTÃO)
-   ==================================================== */
-/* ====================================================
-   TELA INICIAL COM GIF DE FUNDO EM TELA CHEIA
-   ==================================================== */
+
 #start-screen {
   position: fixed;
   top: 0;
@@ -332,6 +317,8 @@ body.biome-antartida .hud-biome span { color: #8becec; background-color: #ecfeff
 
 /* CONTAINER DA LOGO E BOTÃO (SOBREPOEM O GIF) */
 /* CONTAINER CENTRAL - Deslocado para cima */
+/* CONTAINER CENTRAL DE CONTEÚDO */
+/* CONTAINER CENTRAL DA TELA INICIAL */
 .start-content {
   position: relative;
   z-index: 2;
@@ -339,8 +326,26 @@ body.biome-antartida .hud-biome span { color: #8becec; background-color: #ecfeff
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  gap: 25px;            /* Reduzido o espaço para aproximar o botão da logo */
-  transform: translateY(-50px); /* Puxa todo o bloco 50px para cima */
+  gap: 25px;
+  transform: translateY(-40px); /* Reajusta a altura central do botão e da logo */
+}
+
+/* LOGO DA EQUIPA - CANTO INFERIOR DIREITO */
+#team-logo {
+  position: absolute;
+  bottom: 10px;                 /* Distância do fundo da tela */
+  right: 10px;                  /* Distância da borda direita */
+  width: 300px;                 /* Tamanho discreto para o canto */
+  max-width: 25vw;              /* Proteção para telas menores */
+  height: auto;
+  object-fit: contain;
+  z-index: 2;                   /* Fica sobreposto ao GIF de fundo */
+  filter: drop-shadow(0 4px 10px rgba(0, 0, 0, 0.8));
+  transition: transform 0.2s ease;
+}
+
+#team-logo:hover {
+  transform: scale(1.05);
 }
 
 /* LOGO - Tamanho Aumentado */
@@ -368,6 +373,7 @@ body.biome-antartida .hud-biome span { color: #8becec; background-color: #ecfeff
   box-shadow: 0 6px 15px rgba(0, 0, 0, 0.5);
 }
 
+
 #start-btn:hover {
   background: #219653;
   transform: scale(1.06);
@@ -376,13 +382,16 @@ body.biome-antartida .hud-biome span { color: #8becec; background-color: #ecfeff
 /* ====================================================
    TELA "COMO JOGAR" (TUTORIAL)
    ==================================================== */
+/* ====================================================
+   TELA "COMO JOGAR" (TUTORIAL 100% OPACA)
+   ==================================================== */
 #tutorial-screen {
   position: fixed;
   top: 0;
   left: 0;
   width: 100vw;
   height: 100vh;
-  background: rgba(15, 23, 42, 0.96); /* Fundo escuro e elegante */
+  background-color: #0f172a; /* Cor sólida - esconde o jogo completamente */
   display: flex;
   align-items: center;
   justify-content: center;
@@ -429,4 +438,16 @@ body.biome-antartida .hud-biome span { color: #8becec; background-color: #ecfeff
 #play-now-btn:hover {
   background: #219653;
   transform: scale(1.04);
+}
+
+/* ====================================================
+   PADRONIZAÇÃO DOS SPRITES DE LIXO E ÁRVORES
+   ==================================================== */
+.game-item, .item {
+  position: absolute;
+  width: 60px;                /* Tamanho padrão dos itens na pista */
+  height: 60px;
+  object-fit: contain;
+  image-rendering: pixelated;  /* Mantém a nitidez do estilo Retro */
+  z-index: 10;
 }
